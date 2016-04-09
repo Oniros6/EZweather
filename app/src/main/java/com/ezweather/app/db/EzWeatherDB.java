@@ -1,11 +1,13 @@
-package com.ezweather.app.model;
+package com.ezweather.app.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.ezweather.app.db.EzWeatherOpenHelper;
+import com.ezweather.app.model.City;
+import com.ezweather.app.model.County;
+import com.ezweather.app.model.Province;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class EzWeatherDB {
     /**
     *数据库名
      */
-    public static final String DB_NAME = "cool_weather";
+    public static final String DB_NAME = "ez_weather";
 
     /**
      * 数据库版本
@@ -57,9 +59,6 @@ public class EzWeatherDB {
         }
     }
 
-    /**
-     *读取全国省份信息
-     */
     public List<Province> loadProvince(){
         List<Province> list = new ArrayList<Province>();
         Cursor cursor = db
@@ -79,23 +78,43 @@ public class EzWeatherDB {
         return list;
     }
 
-    public List<City> loadCities(int provinceId){
+    public void saveCity(City city) {
+        if (city != null) {
+            ContentValues values = new ContentValues();
+            values.put("city_name", city.getCityName());
+            values.put("city_code", city.getCityCode());
+            values.put("province_id", city.getProvinceId());
+            db.insert("City", null, values);
+        }
+    }
+
+    public List<City> loadCities(int provinceId) {
         List<City> list = new ArrayList<City>();
-        Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf(provinceId)}, null, null, null);
-        if (cursor.moveToFirst()){
+        Cursor cursor = db.query("City", null, "province_id = ?",
+                new String[] { String.valueOf(provinceId) }, null, null, null);
+        if (cursor.moveToFirst()) {
             do {
-                City city  = new City();
+                City city = new City();
                 city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-                city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
+                city.setCityName(cursor.getString(cursor
+                        .getColumnIndex("city_name")));
+                city.setCityCode(cursor.getString(cursor
+                        .getColumnIndex("city_code")));
                 city.setProvinceId(provinceId);
                 list.add(city);
-            }while(cursor.moveToNext());
-        }
-        if (cursor != null){
-            cursor.close();
+            } while (cursor.moveToNext());
         }
         return list;
+    }
+
+    public void saveCounty(County county) {
+        if (county != null) {
+            ContentValues values = new ContentValues();
+            values.put("county_name", county.getCountyName());
+            values.put("county_code", county.getCountyCode());
+            values.put("city_id", county.getCityId());
+            db.insert("County", null, values);
+        }
     }
 
     public List<County> loadCounties(int cityId){
