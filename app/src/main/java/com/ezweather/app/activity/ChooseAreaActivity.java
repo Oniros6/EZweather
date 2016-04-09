@@ -78,8 +78,8 @@ public class ChooseAreaActivity extends Activity {
         isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("city_selected", false) && !isFromWeatherActivity) {
-           // Intent intent = new Intent(this, WeatherActivity.class);
-           // startActivity(intent);
+            Intent intent = new Intent(this, WeatherActivity.class);
+            startActivity(intent);
             finish();
             return;
         }
@@ -102,10 +102,10 @@ public class ChooseAreaActivity extends Activity {
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String countyCode = countyList.get(index).getCountyCode();
-                   // Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
-                   // intent.putExtra("county_code", countyCode);
-                   // startActivity(intent);
-                   // finish();
+                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                    intent.putExtra("county_code", countyCode);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
