@@ -35,16 +35,16 @@ public class Utility {
     }
 
     public synchronized static boolean handleCitiesResponse(EzWeatherDB ezWeatherDB, String response, int provinceId){
-        if (!TextUtils.isEmpty(response)){
-            String [] allCities = response.split(",");
-            if (allCities != null && allCities.length > 0 ){
-                for (String c : allCities){
-                    String [] array = c.split("\\|");
+        if (!TextUtils.isEmpty(response)) {
+            String[] allCities = response.split(",");
+            if (allCities != null && allCities.length > 0) {
+                for (String c : allCities) {
+                    String[] array = c.split("\\|");
                     City city = new City();
                     city.setCityCode(array[0]);
                     city.setCityName(array[1]);
                     city.setProvinceId(provinceId);
-                    //存储数据到City表
+                    // 将解析出来的数据存储到City表
                     ezWeatherDB.saveCity(city);
                 }
                 return true;
@@ -53,17 +53,18 @@ public class Utility {
         return false;
     }
 
-    public synchronized static boolean handleCountiesResponse(EzWeatherDB ezWeatherDB, String response, int cityId){
-        if (!TextUtils.isEmpty(response)){
-            String [] allCounties = response.split(",");
-            if (allCounties != null && allCounties.length > 0 ){
-                for (String c : allCounties){
-                    String [] array = c.split("\\|");
+    public static boolean handleCountiesResponse(EzWeatherDB ezWeatherDB,
+                                                 String response, int cityId) {
+        if (!TextUtils.isEmpty(response)) {
+            String[] allCounties = response.split(",");
+            if (allCounties != null && allCounties.length > 0) {
+                for (String c : allCounties) {
+                    String[] array = c.split("\\|");
                     County county = new County();
                     county.setCountyCode(array[0]);
                     county.setCountyName(array[1]);
                     county.setCityId(cityId);
-                    //存储数据到City表
+                    // 将解析出来的数据存储到County表
                     ezWeatherDB.saveCounty(county);
                 }
                 return true;
