@@ -148,7 +148,6 @@ public class ChooseAreaActivity extends Activity {
         } else {
             queryFromServer(selectedProvince.getProvinceCode(), "city");
         }
-        Log.d("ChooseLevel","current" + currentLevel);
     }
 
     /**
